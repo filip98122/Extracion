@@ -1,10 +1,4 @@
-
-import os
-import random
 from loader import *
-import math
-import time
-import json
 textures=load()
 
 """
@@ -17,7 +11,7 @@ def end():
     file_data=json.loads(file_data)
     return file_data
 """
-
+"""
 
 
 
@@ -38,6 +32,7 @@ def read():
 info=read()
 def save(info):
     ens(info)
+"""
 #save({'local': {'turn': 'b', 'check': False, 'cheesboardmap': None, 'value': 0.00}, 'ai': {},"lpieces":{}})
 #exit()
 def collison(x1,y1,r1,x2,y2,r2): 
