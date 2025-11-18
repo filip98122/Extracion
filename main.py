@@ -9,6 +9,9 @@ while True:
     events = pygame.event.get()
     mouseState = pygame.mouse.get_pressed()
     mousePos = pygame.mouse.get_pos()
+    p1.genral(window,keys,croshair)
+    croshair.draw(window,mousePos)
+    print(p1.angle)
     if keylogesc==0:
         if keys[pygame.K_ESCAPE]:
             keylogesc=300

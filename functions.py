@@ -81,3 +81,26 @@ def button_colision(width,height,x,y,mousePos,mouseState):
         return True
     else:
         return False
+def Vector_Normalization(x,y):
+    # Calculate dx and dy with direction
+    vector_length=abs(math.sqrt(x*x+y*y))#Pitagorina teorema
+    x=x/vector_length
+    y=y/vector_length
+    return x,y
+
+def vector_to_angle(x1,y1):
+    x,y=Vector_Normalization(x1,y1)
+    rad=math.acos(x)
+    anglenotnormal = int(round(math.degrees(rad)))
+    anglenotnormal-=90
+    anglenotnormal*=-1
+    anglenotnormal+=360
+    anglenotnormal%=360
+    if y<0:
+        if anglenotnormal>=180:
+            anglenotnormal-=2*(abs(270-anglenotnormal))
+        else:
+            anglenotnormal+=2*(abs(90-anglenotnormal))
+    anglenotnormal+=360
+    anglenotnormal%=360
+    return anglenotnormal,x,y#dobijes
