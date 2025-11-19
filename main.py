@@ -1,4 +1,5 @@
 from classes import *
+pygame.mouse.set_visible(False)
 keylogesc=0
 while True:
     if keylogesc>=1:
@@ -9,9 +10,16 @@ while True:
     events = pygame.event.get()
     mouseState = pygame.mouse.get_pressed()
     mousePos = pygame.mouse.get_pos()
-    p1.genral(window,keys,croshair)
+    
     croshair.draw(window,mousePos)
-    print(p1.angle)
+    cou=0
+    for i in range(len(l_bullets)):
+        l_bullets[cou].general(window)
+        if l_bullets[cou].halflife==0:
+            del l_bullets[cou]
+            cou-=1
+        cou+=1
+    p1.genral(window,keys,croshair)
     if keylogesc==0:
         if keys[pygame.K_ESCAPE]:
             keylogesc=300

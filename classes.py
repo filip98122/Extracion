@@ -19,7 +19,7 @@ class Player:
         s.angle+=360
         s.angle%=360
         s.image=textures[f"player{s.angle}"]
-        window.blit(s.image,(s.x-s.image.get_width()/2,s.y-s.image.get_height()))
+        window.blit(s.image,s.image.get_rect(center=(s.x,s.y)))
         if keys[pygame.K_w]:
             s.dy-=s.fspeed
         if keys[pygame.K_s]:
@@ -32,17 +32,37 @@ class Player:
         s.y+=s.dy
         anglenotnormal,dx,dy=vector_to_angle(croshier.x-s.x,s.y-croshier.y)
         s.angle=anglenotnormal
-        
+        if keys[pygame.K_SPACE] and s.shoottime==0:
+            s.shoottime=20
+            l_bullets.append(bullet(s.x,s.y,dx,dy*-1,s.angle))
+l_bullets=[
+    
+    
+    
+    
+]
 class bullet:
-    def __init__(s,x,y,dx,dy):
+    def __init__(s,x,y,dx,dy,angle):
         s.x=x
         s.y=y
         s.dx=dx
         s.dy=dy
-        s.halflife=60
-        s.speedmult=2.5
+        s.halflife=27
+        s.speedmult=35
+        s.angle=angle
+        if f"bullet{s.angle}" in textures:
+            pass
+        else:
+            textures[f"bullet{s.angle}"]=pygame.transform.rotate(textures["bullet0"],-s.angle+360)
+        s.image=textures[f"bullet{s.angle}"]
+        s.dx*=s.speedmult
+        s.dy*=s.speedmult
+        
     def general(s,window):
-        window
+        window.blit(s.image,(s.x,s.y))
+        s.x+=s.dx
+        s.y+=s.dy
+        s.halflife-=1
         
         
 class crosheir:
