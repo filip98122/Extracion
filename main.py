@@ -11,15 +11,37 @@ while True:
     mouseState = pygame.mouse.get_pressed()
     mousePos = pygame.mouse.get_pos()
     
-    croshair.draw(window,mousePos)
+    
+    cou=0
+    for i in range(len(l_enemies)):
+        l_enemies[cou].general(window,keys,p1)
+        cou+=1
     cou=0
     for i in range(len(l_bullets)):
         l_bullets[cou].general(window)
-        if l_bullets[cou].halflife==0:
+        if l_bullets[cou].halflife<=0:
             del l_bullets[cou]
-            cou-=1
+            continue
+        if colision1(pygame.rect.Rect(l_bullets[cou].x,l_bullets[cou].y,l_bullets[cou].w,l_bullets[cou].h),pygame.rect.Rect(p1.x-p1.image.get_width()//2,p1.y-p1.image.get_height()//2,p1.image.get_width(),p1.image.get_height())) and l_bullets[cou].origin=="e":
+            p1.health-=1
+            del l_bullets[cou]
+            continue
+        if l_bullets[cou].origin=="s":
+            coun1=0
+            for j in range(len(l_enemies)):
+                if colision1(pygame.rect.Rect(l_bullets[cou].x,l_bullets[cou].y,l_bullets[cou].w,l_bullets[cou].h),pygame.rect.Rect(l_enemies[coun1].x,l_enemies[coun1].y,l_enemies[coun1].image.get_width(),l_enemies[coun1].image.get_height())):
+                    l_enemies[coun1].health-=1
+                    if l_enemies[coun1].health==0:
+                        del l_enemies[coun1]
+                        coun1-=1
+                    del l_bullets[cou]
+                    break
+                coun1+=1
+            continue
+
         cou+=1
-    p1.genral(window,keys,croshair)
+    p1.genral(window,keys,croshair,mouseState)
+    croshair.draw(window,mousePos)
     if keylogesc==0:
         if keys[pygame.K_ESCAPE]:
             keylogesc=300

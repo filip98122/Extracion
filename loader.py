@@ -18,4 +18,5 @@ def load():
         textures[f"player{((-i)+360)}"]=pygame.transform.rotate(textures["player0"],i)
     textures["crosheir"]=pygame.transform.scale(pygame.image.load("textures/crosheir.png"),(tileh/2,tileh/2))
     textures["bullet0"]=pygame.transform.scale(pygame.image.load("textures/bullet.png"),(tilew/9.6,tileh/1.5))
+    textures["bird0"]=pygame.transform.scale(pygame.image.load("textures/bird.png"),(tileh,tilew))
     return textures
