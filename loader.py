@@ -19,4 +19,5 @@ def load():
     textures["crosheir"]=pygame.transform.scale(pygame.image.load("textures/crosheir.png"),(tileh/3,tileh/3))
     textures["bullet0"]=pygame.transform.scale(pygame.image.load("textures/bullet.png"),(tilew/9.6,tileh/1.5))
     textures["bird0"]=pygame.transform.scale(pygame.image.load("textures/bird.png"),(tileh/1.5,tilew/1.5))
+    textures["tree1"]=pygame.transform.scale(pygame.image.load("textures/tree.png"),(tilew,tileh))
     return textures

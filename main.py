@@ -5,8 +5,8 @@ keylogesc=0
 while True:
     if keylogesc>=1:
         keylogesc-=1
-    window.fill((0,0,0))
-    rendermap(maps,namematch)
+    window.fill((10,150,10))
+    rendermap(maps,namematch,offsetx,offsety,l_bullets)
     keys = pygame.key.get_pressed()
     events = pygame.event.get()
     mouseState = pygame.mouse.get_pressed()
@@ -17,14 +17,14 @@ while True:
         if l_bullets[cou].halflife<=0:
             del l_bullets[cou]
             continue
-        if colision1(pygame.rect.Rect(l_bullets[cou].x+(offsetx-l_bullets[cou].ofx),l_bullets[cou].y+(offsety-l_bullets[cou].ofy),l_bullets[cou].w,l_bullets[cou].h),pygame.rect.Rect(p1.x-p1.image.get_width()//2,p1.y-p1.image.get_height()//2,p1.image.get_width(),p1.image.get_height())) and l_bullets[cou].origin=="e":
+        if colision1(pygame.rect.Rect(l_bullets[cou].x+(offsetx-l_bullets[cou].ofx)-l_bullets[cou].w//2,l_bullets[cou].y+(offsety-l_bullets[cou].ofy)-l_bullets[cou].h//2,l_bullets[cou].w,l_bullets[cou].h),pygame.rect.Rect(p1.x-p1.image.get_width()//2,p1.y-p1.image.get_height()//2,p1.image.get_width(),p1.image.get_height())) and l_bullets[cou].origin=="e":
             p1.health-=1
             del l_bullets[cou]
             continue
         if l_bullets[cou].origin=="s":
             coun1=0
             for j in range(len(l_enemies)):
-                if colision1(pygame.rect.Rect(l_bullets[cou].x+(offsetx-l_bullets[cou].ofx),l_bullets[cou].y+(offsety-l_bullets[cou].ofy),l_bullets[cou].w,l_bullets[cou].h),pygame.rect.Rect(l_enemies[coun1].x+offsetx,l_enemies[coun1].y+offsety,l_enemies[coun1].image.get_width(),l_enemies[coun1].image.get_height())):
+                if colision1(pygame.rect.Rect(l_bullets[cou].x+(offsetx-l_bullets[cou].ofx)-l_bullets[cou].w//2,l_bullets[cou].y+(offsety-l_bullets[cou].ofy)-l_bullets[cou].h//2,l_bullets[cou].w,l_bullets[cou].h),pygame.rect.Rect(l_enemies[coun1].x+offsetx,l_enemies[coun1].y+offsety,l_enemies[coun1].image.get_width(),l_enemies[coun1].image.get_height())):
                     l_enemies[coun1].health-=1
                     if l_enemies[coun1].health==0:
                         del l_enemies[coun1]
