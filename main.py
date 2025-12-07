@@ -12,6 +12,7 @@ while True:
     mouseState = pygame.mouse.get_pressed()
     mousePos = pygame.mouse.get_pos()
     cou=0
+    window.blit(textures["bar"],(100,100))
     for i in range(len(l_bullets)):
         l_bullets[cou].general(window)
         if l_bullets[cou].halflife<=0:

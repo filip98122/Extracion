@@ -8,6 +8,7 @@ class Player:
         s.angle=angle
         s.speed=speed
         s.shoottime=0
+        s.maxhealth=s.health
     def genral(s,window,keys,croshier:object,mouse):#prvi put ovo radim sa:object
         global offsetx,offsety
         s.fspeed=s.speed
@@ -17,7 +18,10 @@ class Player:
         s.angle+=360
         s.angle%=360
         s.image=textures[f"player{s.angle}"]
+
         window.blit(s.image,s.image.get_rect(center=(s.x,s.y)))
+        if s.health!=s.maxhealth:
+            publicbar.draw(s.health,s.x,s.y-s.image.get_height()/2-tileh/3,s.maxhealth)
         if (keys[pygame.K_w] or keys[pygame.K_s]) and (keys[pygame.K_a] or keys[pygame.K_d]):
             s.fspeed/=1.5
         if keys[pygame.K_w]:
@@ -37,6 +41,15 @@ class Player:
             exit()
         return offsetx,offsety
 l_bullets=[]
+class bar:
+    def __init__(s):
+        pass
+    def draw(s,h,x,y,mxh):
+        w=textures["bar"].get_width()
+        frame=w/53.75
+        pygame.draw.rect(window,pygame.Color(124,13,14),pygame.Rect(frame+x-w/2,y-textures["bar"].get_height()/2,(w-frame*2)/mxh*h,textures["bar"].get_height()))#/8
+        window.blit(textures["bar"],(x-w/2,y-textures["bar"].get_height()/2))
+publicbar=bar()
 class enemy:
     def __init__(s,x,y,tip):
         s.x=x
@@ -46,6 +59,7 @@ class enemy:
             s.health=2
         s.speed=1
         s.shoottime=0
+        s.maxhealth=s.health
     def general(s,window,keys,croshier:object):#prvi put ovo radim sa:object
         s.fspeed=s.speed
         if s.shoottime>0:
@@ -58,6 +72,8 @@ class enemy:
         if f"bird{s.angle}" not in textures:
             textures[f"bird{s.angle}"]=pygame.transform.rotate(textures["bird0"],-s.angle+360)
         s.image=textures[f"bird{s.angle}"]
+        if s.health!=s.maxhealth:
+            publicbar.draw(s.health,s.x,s.y-s.image.get_height()/2-tileh/3,s.maxhealth)
         window.blit(s.image,s.image.get_rect(center=(s.x+offsetx,s.y+offsety)))
         s.x+=s.dx
         s.y+=s.dy
