@@ -10,6 +10,7 @@ with open("map.txt","r",) as f:
             maps[i].append(ltemp[i][j])
 namematch=[[".",None],["+",textures["+"]],["t",textures["tree1"]]]#[neki]
 
+lparticles=[]
 def rendermap(maps,name,offsetx,offsety,lbull):
     for i in range(len(maps)):
         for j in range(len(maps[i])):

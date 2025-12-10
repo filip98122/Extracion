@@ -20,5 +20,5 @@ def load():
     textures["bullet0"]=pygame.transform.scale(pygame.image.load("textures/bullet.png"),(tilew/9.6,tileh/1.5))
     textures["bird0"]=pygame.transform.scale(pygame.image.load("textures/bird.png"),(tileh/1.5,tilew/1.5))
     textures["tree1"]=pygame.transform.scale(pygame.image.load("textures/tree.png"),(tilew,tileh))
-    textures["bar"]=pygame.transform.scale(pygame.image.load("textures/bar.png"),(tilew/1.2,tileh/16))
+    textures["bar"]=pygame.transform.scale(pygame.image.load("textures/bar.png"),(tilew/1.2,tileh/12))
     return textures

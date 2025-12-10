@@ -21,7 +21,7 @@ class Player:
 
         window.blit(s.image,s.image.get_rect(center=(s.x,s.y)))
         if s.health!=s.maxhealth:
-            publicbar.draw(s.health,s.x,s.y-s.image.get_height()/2-tileh/3,s.maxhealth)
+            publicbar.draw(s.health,s.x,s.y-tileh/2-tileh/3,s.maxhealth)
         if (keys[pygame.K_w] or keys[pygame.K_s]) and (keys[pygame.K_a] or keys[pygame.K_d]):
             s.fspeed/=1.5
         if keys[pygame.K_w]:
@@ -84,6 +84,32 @@ class enemy:
             l_bullets.append(bullet(s.x+offsetx,s.y+offsety,dx,dy*-1,s.angle,"e",offsetx,offsety))
     
 l_enemies=[enemy(700,700,"bird")]
+class Particle:
+    def __init__(s,color,x,y,dx,dy,halflife,slep):
+        s.color=color
+        s.x=x
+        s.y=y
+        s.dx=dx
+        s.dy=dy
+        s.halflife=halflife
+        s.ddy=0.01
+        s.slep=slep
+    def general(s):
+        if s.slep==0:
+            pygame.draw.circle(window,s.color,(s.x,s.y),tileh/24)
+            s.x+=s.dx
+            s.y+=s.dy
+            s.halflife-=1
+            if s.dx<0:
+                s.dx-=max(-0.1,s.dx)
+            if s.dx>0:
+                s.dx-=min(0.1,s.dx)
+            s.dy+=s.ddy
+            s.ddy+=0.03
+        else:
+            s.slep-=1
+def particle(color,x,y,dx,dy,halflife,sleep):
+    lparticles.append(Particle(color,x,y,dx,dy,halflife,sleep))
 class bullet:
     def __init__(s,x,y,dx,dy,angle,origin,ofx,ofy):
         s.x=x
