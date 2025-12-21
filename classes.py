@@ -18,12 +18,14 @@ class Player:
         s.angle+=360
         s.angle%=360
         s.image=textures[f"player{s.angle}"]
-
+        s.w=s.image.get_width()
+        s.h=s.image.get_height()
         window.blit(s.image,s.image.get_rect(center=(s.x,s.y)))
         if s.health!=s.maxhealth:
             publicbar.draw(s.health,s.x,s.y-tileh/2-tileh/3,s.maxhealth)
         if (keys[pygame.K_w] or keys[pygame.K_s]) and (keys[pygame.K_a] or keys[pygame.K_d]):
             s.fspeed/=1.5
+        prof=[offsetx,offsety]
         if keys[pygame.K_w]:
             offsety+=s.fspeed
         if keys[pygame.K_s]:
@@ -32,6 +34,17 @@ class Player:
             offsetx-=s.fspeed
         if keys[pygame.K_a]:
             offsetx+=s.fspeed
+        indexx=int((s.x+-offsetx)//tilew)
+        indexy=int((s.y+-offsety)//tileh)
+        for i in range(-1,2):
+            for j in range(-1,2):
+                treny=indexy+i
+                trenx=indexx+j
+                if not (treny<0 or treny<0 or treny>=len(maps) or trenx>=len(maps[treny])):
+                    if maps[treny][trenx]!=".":
+                        if colision1(pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h),pygame.Rect(trenx*tilew+offsetx,treny*tileh+offsety,tilew,tileh)):
+                            offsetx=prof[0]
+                            offsety=prof[1]
         anglenotnormal,dx,dy=vector_to_angle(croshier.x-s.x,s.y-croshier.y)
         s.angle=anglenotnormal
         if mouse[0] and s.shoottime==0:
