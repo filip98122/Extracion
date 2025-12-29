@@ -1,4 +1,11 @@
 from pesonalfunctions import *
+"""
+class Inventory:
+    def __init__(s,size,contents):
+        s.size=size
+        s.contents=contents
+    def general(s):
+        """
 class Player:
     def __init__(s,x,y,health,animation,angle,speed):
         s.x=x
@@ -57,10 +64,11 @@ l_bullets=[]
 class bar:
     def __init__(s):
         pass
-    def draw(s,h,x,y,mxh):
+    def draw(s,health,x,y,mxh):
         w=textures["bar"].get_width()
         frame=w/53.75
-        pygame.draw.rect(window,pygame.Color(124,13,14),pygame.Rect(frame+x-w/2,y-textures["bar"].get_height()/2,(w-frame*2)/mxh*h,textures["bar"].get_height()))#/8
+        h=textures["bar"].get_height()
+        pygame.draw.rect(window,pygame.Color(124,13,14),pygame.Rect(frame+x-w/2,y-h+h/2,(w-frame*2)/mxh*health,h))#/8
         window.blit(textures["bar"],(x-w/2,y-textures["bar"].get_height()/2))
 publicbar=bar()
 class enemy:
@@ -86,7 +94,7 @@ class enemy:
             textures[f"bird{s.angle}"]=pygame.transform.rotate(textures["bird0"],-s.angle+360)
         s.image=textures[f"bird{s.angle}"]
         if s.health!=s.maxhealth:
-            publicbar.draw(s.health,s.x,s.y-s.image.get_height()/2-tileh/3,s.maxhealth)
+            publicbar.draw(s.health,s.x+offsetx,s.y-s.image.get_height()/2-tileh/3+offsety,s.maxhealth)
         window.blit(s.image,s.image.get_rect(center=(s.x+offsetx,s.y+offsety)))
         s.x+=s.dx
         s.y+=s.dy
@@ -97,32 +105,6 @@ class enemy:
             l_bullets.append(bullet(s.x+offsetx,s.y+offsety,dx,dy*-1,s.angle,"e",offsetx,offsety))
     
 l_enemies=[enemy(700,700,"bird")]
-class Particle:
-    def __init__(s,color,x,y,dx,dy,halflife,slep):
-        s.color=color
-        s.x=x
-        s.y=y
-        s.dx=dx
-        s.dy=dy
-        s.halflife=halflife
-        s.ddy=0.01
-        s.slep=slep
-    def general(s):
-        if s.slep==0:
-            pygame.draw.circle(window,s.color,(s.x,s.y),tileh/24)
-            s.x+=s.dx
-            s.y+=s.dy
-            s.halflife-=1
-            if s.dx<0:
-                s.dx-=max(-0.1,s.dx)
-            if s.dx>0:
-                s.dx-=min(0.1,s.dx)
-            s.dy+=s.ddy
-            s.ddy+=0.03
-        else:
-            s.slep-=1
-def particle(color,x,y,dx,dy,halflife,sleep):
-    lparticles.append(Particle(color,x,y,dx,dy,halflife,sleep))
 class bullet:
     def __init__(s,x,y,dx,dy,angle,origin,ofx,ofy):
         s.x=x

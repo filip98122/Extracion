@@ -1,7 +1,17 @@
 from classes import *
 pygame.mouse.set_visible(False)
 keylogesc=0
- 
+#Bug1:plater blood particles would still be calculated using the offsetx/y(the thing the makes everything seem to go to the leftt if you press right)
+#Fix1: Added a special case with if the player was shot (Note: this can have further uses later)
+#Bug2: The enemy bar was not directly above him when i moved(stayed fixed in a pos)
+#Fix2: After a lot of debugging found that i was not inputing x+offsetx, but just x :|
+#Bug3: Particles would become fixed (like in bug2)
+#Fix3:Apparently in the personalfunctions file the "global" variable of offsetx/y would be 0( bcs i at the start of the file,not in a function, i said offsetx/y=0)
+#
+#
+#
+#
+#
 while True:
     if keylogesc>=1:
         keylogesc-=1
@@ -23,7 +33,7 @@ while True:
                 negative=1
                 if random.randint(0,1)==0:
                     negative=-1
-                particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x,l_bullets[cou].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii))
+                particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x,l_bullets[cou].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety,"player")
             del l_bullets[cou]
             continue
         if l_bullets[cou].origin=="s":
@@ -38,7 +48,7 @@ while True:
                         negative=1
                         if random.randint(0,1)==0:
                             negative=-1
-                        particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x,l_bullets[cou].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii))
+                        particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x,l_bullets[cou].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety)
                     del l_bullets[cou]
                     break
                 coun1+=1
@@ -61,7 +71,7 @@ while True:
             break
     count=0
     for i in range(len(lparticles)):
-        lparticles[count].general()
+        lparticles[count].general(offsetx,offsety)
         if lparticles[count].halflife==0:
             del lparticles[count]
             continue

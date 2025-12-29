@@ -3,7 +3,8 @@ offsetx=0
 offsety=0
 maps=[]
 class Particle:
-    def __init__(s,color,x,y,dx,dy,halflife,slep,ofx,ofy):
+    def __init__(s,color,x,y,dx,dy,halflife,slep,ofx,ofy,who):
+        s.who=who
         s.color=color
         s.x=x
         s.y=y
@@ -14,11 +15,12 @@ class Particle:
         s.slep=slep
         s.ofx=ofx
         s.ofy=ofy
-    def general(s):
-        global offsetx
-        global offsety
+    def general(s,ofx,ofy):
         if s.slep==0:
-            pygame.draw.circle(window,s.color,(s.x+(offsetx-s.ofx),s.y+(offsety-s.ofy)),tileh/24)
+            if s.who=="player":
+                pygame.draw.circle(window,s.color,(s.x,s.y),tileh/24)
+            else:
+                pygame.draw.circle(window,s.color,(s.x+(ofx-s.ofx),s.y+(ofy-s.ofy)),tileh/24)
             s.x+=s.dx
             s.y+=s.dy
             s.halflife-=1
@@ -30,8 +32,8 @@ class Particle:
             s.ddy+=0.03
         else:
             s.slep-=1
-def particle(color,x,y,dx,dy,halflife,sleep):
-    lparticles.append(Particle(color,x,y,dx,dy,halflife,sleep,offsetx,offsety))
+def particle(color,x,y,dx,dy,halflife,sleep,offsetx,offsety,who=None):
+    lparticles.append(Particle(color,x,y,dx,dy,halflife,sleep,offsetx,offsety,who))
 with open("map.txt","r",) as f:
     ltemp=f.readlines()
     for i in range(len(ltemp)):
@@ -59,7 +61,7 @@ def rendermap(maps,name,offsetx,offsety,lbull):
                             negative=1
                             if random.randint(0,1)==0:
                                 negative=-1
-                            particle((random.randint(name[ncuvar][2][0],name[ncuvar][2][1]),random.randint(name[ncuvar][2][2],name[ncuvar][2][3]),random.randint(name[ncuvar][2][4],name[ncuvar][2][5])),lbull[ii].x,lbull[ii].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii))
+                            particle((random.randint(name[ncuvar][2][0],name[ncuvar][2][1]),random.randint(name[ncuvar][2][2],name[ncuvar][2][3]),random.randint(name[ncuvar][2][4],name[ncuvar][2][5])),lbull[ii].x,lbull[ii].y,(random.uniform(2,4))*negative,-tileh/40,95,random.randint(0,iii),offsetx,offsety)
                         del lbull[ii]
                         ii-=1
                     ii+=1
