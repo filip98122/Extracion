@@ -33,7 +33,7 @@ while True:
                 negative=1
                 if random.randint(0,1)==0:
                     negative=-1
-                particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x,l_bullets[cou].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety,"player")
+                particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x+(80*l_bullets[cou].originaldxdy[0]),l_bullets[cou].y+(80*l_bullets[cou].originaldxdy[1]),(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety,"player")
             del l_bullets[cou]
             continue
         if l_bullets[cou].origin=="s":
@@ -48,7 +48,7 @@ while True:
                         negative=1
                         if random.randint(0,1)==0:
                             negative=-1
-                        particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x,l_bullets[cou].y,(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety)
+                        particle((random.randint(160,190),random.randint(28,58),random.randint(15,45)),l_bullets[cou].x+(80*l_bullets[cou].originaldxdy[0]),l_bullets[cou].y+(80*l_bullets[cou].originaldxdy[1]),(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety)
                     del l_bullets[cou]
                     break
                 coun1+=1

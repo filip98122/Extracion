@@ -1,11 +1,18 @@
 from pesonalfunctions import *
-"""
+
 class Inventory:
-    def __init__(s,size,contents):
+    def __init__(s,size,contents,origin,gunslots=None,extraslots=None,safeslots=None):
         s.size=size
         s.contents=contents
-    def general(s):
-        """
+        s.origin=origin
+        s.awayfromleft=1000
+        s.awayfromtop=300
+        s.w=textures["inventoryslot"].get_width()
+        s.h=textures["inventoryslot"].get_height()
+    def p(s):
+        for i in range(max(s.size//5,1)):
+            for j in range(min(s.size-j*5,5)):
+                window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
 class Player:
     def __init__(s,x,y,health,animation,angle,speed):
         s.x=x
@@ -13,7 +20,7 @@ class Player:
         s.health=health
         s.animation=animation
         s.angle=angle
-        s.speed=speed
+        s.speed=speed+10
         s.shoottime=0
         s.maxhealth=s.health
     def genral(s,window,keys,croshier:object,mouse):#prvi put ovo radim sa:object
@@ -111,6 +118,7 @@ class bullet:
         s.y=y
         s.dx=dx
         s.dy=dy
+        s.originaldxdy=[dx,dy]
         s.halflife=27
         s.speedmult=35
         s.angle=angle
@@ -131,8 +139,6 @@ class bullet:
         s.x+=s.dx
         s.y+=s.dy
         s.halflife-=1
-        
-        
 class crosheir:
     def __init__(s,x,y):
         s.x=x
