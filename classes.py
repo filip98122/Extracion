@@ -1,17 +1,24 @@
 from pesonalfunctions import *
 
 class Inventory:
-    def __init__(s,size,contents,origin,gunslots=None,extraslots=None,safeslots=None):
+    def __init__(s,size,contents,origin,gunslots=None,gunslotssize=None,extraslots=None,extraslotssize=None,extraslotstype=None,safeslots=None,safeslotssize=None):
         s.size=size
         s.contents=contents
         s.origin=origin
+        s.gunslots=gunslots
+        s.gunslotssize=gunslotssize
+        s.extraslots=extraslots
+        s.extraslotssize=extraslotssize
+        s.extraslotstype=extraslotstype
+        s.safeslots=safeslots
+        s.safeslotssize=safeslotssize
         s.awayfromleft=1000
         s.awayfromtop=300
         s.w=textures["inventoryslot"].get_width()
         s.h=textures["inventoryslot"].get_height()
     def p(s):
         for i in range(max(s.size//5,1)):
-            for j in range(min(s.size-j*5,5)):
+            for j in range(min(s.size-i*5,5)):
                 window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
 class Player:
     def __init__(s,x,y,health,animation,angle,speed):
@@ -20,50 +27,62 @@ class Player:
         s.health=health
         s.animation=animation
         s.angle=angle
-        s.speed=speed+10
+        s.speed=speed
         s.shoottime=0
         s.maxhealth=s.health
+        s.tabstate=False
+        s.holdingtab=False
+        s.inventory=Inventory(13,[],"p",[],2,[],0,None,[],2)
     def genral(s,window,keys,croshier:object,mouse):#prvi put ovo radim sa:object
         global offsetx,offsety
-        s.fspeed=s.speed
-        if s.shoottime>0:
-            s.shoottime-=1
-            s.fspeed//=2
-        s.angle+=360
-        s.angle%=360
-        s.image=textures[f"player{s.angle}"]
-        s.w=s.image.get_width()
-        s.h=s.image.get_height()
-        window.blit(s.image,s.image.get_rect(center=(s.x,s.y)))
-        if s.health!=s.maxhealth:
-            publicbar.draw(s.health,s.x,s.y-tileh/2-tileh/3,s.maxhealth)
-        if (keys[pygame.K_w] or keys[pygame.K_s]) and (keys[pygame.K_a] or keys[pygame.K_d]):
-            s.fspeed/=1.5
-        prof=[offsetx,offsety]
-        if keys[pygame.K_w]:
-            offsety+=s.fspeed
-        if keys[pygame.K_s]:
-            offsety-=s.fspeed
-        if keys[pygame.K_d]:
-            offsetx-=s.fspeed
-        if keys[pygame.K_a]:
-            offsetx+=s.fspeed
-        indexx=int((s.x+-offsetx)//tilew)
-        indexy=int((s.y+-offsety)//tileh)
-        for i in range(-1,2):
-            for j in range(-1,2):
-                treny=indexy+i
-                trenx=indexx+j
-                if not (treny<0 or treny<0 or treny>=len(maps) or trenx>=len(maps[treny])):
-                    if maps[treny][trenx]!=".":
-                        if colision1(pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h),pygame.Rect(trenx*tilew+offsetx,treny*tileh+offsety,tilew,tileh)):
-                            offsetx=prof[0]
-                            offsety=prof[1]
-        anglenotnormal,dx,dy=vector_to_angle(croshier.x-s.x,s.y-croshier.y)
-        s.angle=anglenotnormal
-        if mouse[0] and s.shoottime==0:
-            s.shoottime=20
-            l_bullets.append(bullet(s.x,s.y,dx,dy*-1,s.angle,"s",offsetx,offsety))
+        if s.tabstate==False:
+            s.fspeed=s.speed
+            if s.shoottime>0:
+                s.shoottime-=1
+                s.fspeed//=2
+            s.angle+=360
+            s.angle%=360
+            s.image=textures[f"player{s.angle}"]
+            s.w=s.image.get_width()
+            s.h=s.image.get_height()
+            window.blit(s.image,s.image.get_rect(center=(s.x,s.y)))
+            if s.health!=s.maxhealth:
+                publicbar.draw(s.health,s.x,s.y-tileh/2-tileh/3,s.maxhealth)
+            if (keys[pygame.K_w] or keys[pygame.K_s]) and (keys[pygame.K_a] or keys[pygame.K_d]):
+                s.fspeed/=1.5
+            prof=[offsetx,offsety]
+            if keys[pygame.K_w]:
+                offsety+=s.fspeed
+            if keys[pygame.K_s]:
+                offsety-=s.fspeed
+            if keys[pygame.K_d]:
+                offsetx-=s.fspeed
+            if keys[pygame.K_a]:
+                offsetx+=s.fspeed
+            indexx=int((s.x+-offsetx)//tilew)
+            indexy=int((s.y+-offsety)//tileh)
+            for i in range(-1,2):
+                for j in range(-1,2):
+                    treny=indexy+i
+                    trenx=indexx+j
+                    if not (treny<0 or treny<0 or treny>=len(maps) or trenx>=len(maps[treny])):
+                        if maps[treny][trenx]!=".":
+                            if colision1(pygame.Rect(s.x-s.w//2,s.y-s.h//2,s.w,s.h),pygame.Rect(trenx*tilew+offsetx,treny*tileh+offsety,tilew,tileh)):
+                                offsetx=prof[0]
+                                offsety=prof[1]
+            anglenotnormal,dx,dy=vector_to_angle(croshier.x-s.x,s.y-croshier.y)
+            s.angle=anglenotnormal
+            if mouse[0] and s.shoottime==0:
+                s.shoottime=20
+                l_bullets.append(bullet(s.x,s.y,dx,dy*-1,s.angle,"s",offsetx,offsety))
+        else:
+            s.inventory.p()
+        if keys[pygame.K_TAB]:
+            if s.holdingtab==False:
+                s.tabstate=not s.tabstate
+                s.holdingtab=True
+        else:
+            s.holdingtab=False
         if s.health==0:
             exit()
         return offsetx,offsety

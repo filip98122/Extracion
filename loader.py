@@ -8,6 +8,7 @@ import sys
 pygame.init()
 pygame.font.init()
 WIDTH,HEIGHT=1920,1080
+kolko=40
 tilew=120
 tileh=120
 def load():

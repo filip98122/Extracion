@@ -61,7 +61,7 @@ def rendermap(maps,name,offsetx,offsety,lbull):
                             negative=1
                             if random.randint(0,1)==0:
                                 negative=-1
-                            particle((random.randint(name[ncuvar][2][0],name[ncuvar][2][1]),random.randint(name[ncuvar][2][2],name[ncuvar][2][3]),random.randint(name[ncuvar][2][4],name[ncuvar][2][5])),lbull[ii].x,lbull[ii].y,(random.uniform(2,4))*negative,-tileh/40,95,random.randint(0,iii),offsetx,offsety)
+                            particle((random.randint(name[ncuvar][2][0],name[ncuvar][2][1]),random.randint(name[ncuvar][2][2],name[ncuvar][2][3]),random.randint(name[ncuvar][2][4],name[ncuvar][2][5])),lbull[ii].x+kolko*lbull[ii].originaldxdy[0],lbull[ii].y+kolko*lbull[ii].originaldxdy[1],(random.uniform(2,4))*negative,-tileh/40,25,random.randint(0,iii),offsetx,offsety)
                         del lbull[ii]
                         ii-=1
                     ii+=1
