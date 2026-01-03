@@ -4,6 +4,7 @@ class Inventory:
     def __init__(s,size,contents,origin,gunslots=None,gunslotssize=None,extraslots=None,extraslotssize=None,extraslotstype=None,safeslots=None,safeslotssize=None):
         s.size=size
         s.contents=contents
+        s.contents=make_empty(contents,size)
         s.origin=origin
         s.gunslots=gunslots
         s.gunslotssize=gunslotssize
@@ -16,10 +17,22 @@ class Inventory:
         s.awayfromtop=300
         s.w=textures["inventoryslot"].get_width()
         s.h=textures["inventoryslot"].get_height()
-    def p(s):
-        for i in range(max(s.size//5,1)):
+        
+    def p(s,moustate,mouse,holdingmouse,originalmouse):
+        for i in range(max(s.size//5+1,1)):
             for j in range(min(s.size-i*5,5)):
                 window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
+    def swap(s,xyoriginal,xy):
+        xyoriginal[0]-=s.awayfromleft
+        xyoriginal[1]-=s.awayfromtop
+        xy[0]-=s.awayfromleft
+        xy[1]-=s.awayfromtop
+        
+def make_empty(lis:list,size):
+    
+    for i in range(size):
+        ##          what much
+        lis.append([None,None])
 class Player:
     def __init__(s,x,y,health,animation,angle,speed):
         s.x=x
@@ -32,8 +45,11 @@ class Player:
         s.maxhealth=s.health
         s.tabstate=False
         s.holdingtab=False
-        s.inventory=Inventory(13,[],"p",[],2,[],0,None,[],2)
-    def genral(s,window,keys,croshier:object,mouse):#prvi put ovo radim sa:object
+        s.holdingmouse=False
+        s.originalmouse=[]
+        
+        s.inventory=Inventory(40,[],"p",[],2,[],0,None,[],2)
+    def genral(s,window,keys,croshier:object,mouse,mousepos):#prvi put ovo radim sa:object
         global offsetx,offsety
         if s.tabstate==False:
             s.fspeed=s.speed
@@ -76,7 +92,15 @@ class Player:
                 s.shoottime=20
                 l_bullets.append(bullet(s.x,s.y,dx,dy*-1,s.angle,"s",offsetx,offsety))
         else:
-            s.inventory.p()
+            if mouse[0]:
+                if s.holdingmouse==False:
+                    s.holdingmouse=True
+                    s.originalmouse=[mousepos[0],mousepos[1]]
+            else:
+                if s.holdingmouse==True:
+                    s.inventory.swap(s.originalmouse,[mousepos[0],mousepos[1]])
+                    s.holdingmouse=False
+            s.inventory.p(mouse,mousepos,s.holdingmouse,s.originalmouse)
         if keys[pygame.K_TAB]:
             if s.holdingtab==False:
                 s.tabstate=not s.tabstate
@@ -164,7 +188,6 @@ class crosheir:
         s.y=y
         s.image=textures["crosheir"]
         s.wh=s.image.get_width()
-
     def draw(s,window,mousepos):
         s.x=mousepos[0]
         s.y=mousepos[1]

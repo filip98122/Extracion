@@ -67,7 +67,7 @@ while True:
             l_enemies[cou].general(window,keys,p1)
             cou+=1
     
-        offsetx,offsety=p1.genral(window,keys,croshair,mouseState)
+        offsetx,offsety=p1.genral(window,keys,croshair,mouseState,mousePos)
         croshair.draw(window,mousePos)
         count=0
         for i in range(len(lparticles)):
@@ -78,7 +78,7 @@ while True:
             count+=1
     if p1.tabstate:
         window.fill("black")
-        offsetx,offsety=p1.genral(window,keys,croshair,mouseState)
+        offsetx,offsety=p1.genral(window,keys,croshair,mouseState,mousePos)
     
     pygame.display.update()
     clock.tick(60)
