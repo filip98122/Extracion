@@ -79,6 +79,6 @@ while True:
     if p1.tabstate:
         window.fill("black")
         offsetx,offsety=p1.genral(window,keys,croshair,mouseState,mousePos)
-    
+        croshair.draw(window,mousePos)
     pygame.display.update()
     clock.tick(60)

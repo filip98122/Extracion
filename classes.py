@@ -4,7 +4,9 @@ class Inventory:
     def __init__(s,size,contents,origin,gunslots=None,gunslotssize=None,extraslots=None,extraslotssize=None,extraslotstype=None,safeslots=None,safeslotssize=None):
         s.size=size
         s.contents=contents
-        s.contents=make_empty(contents,size)
+        s.contents=make_empty([],size)
+        s.contents[0]=["hat",1]
+        s.contents[1]=["hat",1]
         s.origin=origin
         s.gunslots=gunslots
         s.gunslotssize=gunslotssize
@@ -19,20 +21,51 @@ class Inventory:
         s.h=textures["inventoryslot"].get_height()
         
     def p(s,moustate,mouse,holdingmouse,originalmouse):
-        for i in range(max(s.size//5+1,1)):
-            for j in range(min(s.size-i*5,5)):
+        for i in range(max(s.size//4+1,1)):
+            for j in range(min(s.size-i*4,4)):
                 window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
+                if s.contents[i*4+j][0]!=None:
+                    window.blit(textures[f"{s.contents[i*4+j][0]}"],textures[f"{s.contents[i*4+j][0]}"].get_rect(center=(j*s.w+s.awayfromleft+s.w//2,i*s.h+s.awayfromtop+s.h//2)))
     def swap(s,xyoriginal,xy):
         xyoriginal[0]-=s.awayfromleft
         xyoriginal[1]-=s.awayfromtop
         xy[0]-=s.awayfromleft
         xy[1]-=s.awayfromtop
-        
-def make_empty(lis:list,size):
     
+        tall=math.ceil(s.size/4)
+        if s.size%4==0:
+            if xy[0]<0 or xy[0]>s.w*4 or xy[1]<0 or xy[1]>tall*s.h:
+                #drop to ground
+                return
+            if xyoriginal[0]<0 or xyoriginal[0]>s.w*4 or xyoriginal[1]<0 or xyoriginal[1]>tall*s.h:
+                return
+        else:
+            if (xy[0]<0 or xy[0]>s.w*4 or xy[1]<0 or xy[1]>tall*s.h) and not (xy[0]>=0 and xy[0]<=s.w*(s.contents%4) and xy[1]>=s.h*(s.size//4) and xy[1]<= tall*s.h):
+                #drop to ground
+                return
+            if (xyoriginal[0]<0 or xyoriginal[0]>s.w*4 or xyoriginal[1]<0 or xyoriginal[1]>tall*s.h) and not (xyoriginal[0]>=0 and xyoriginal[0]<=s.w*(s.contents%4) and xyoriginal[1]>=s.h*(s.size//4) and xyoriginal[1]<= tall*s.h):
+                return
+        
+        originalindex=xyoriginal[1]//s.h*4+xyoriginal[0]//s.w
+        nowindex=xy[1]//s.h*4+xy[0]//s.w
+        if originalindex!=nowindex:
+            if s.contents[originalindex][0]==s.contents[nowindex][0]:
+                #Stack limit dict required
+                    s.contents[nowindex][1]+=s.contents[originalindex][1]
+                    s.contents[originalindex]=[None,0]
+            
+            else:
+                # check if they can be swapped(eg. a non trinket into the trinket pocket)
+                save=copy.deepcopy([s.contents[originalindex],s.contents[nowindex]])
+                s.contents[originalindex]=save[1]
+                s.contents[nowindex]=save[0]
+    
+
+def make_empty(lis:list,size):
     for i in range(size):
         ##          what much
-        lis.append([None,None])
+        lis.append([None,0])
+    return lis
 class Player:
     def __init__(s,x,y,health,animation,angle,speed):
         s.x=x
@@ -48,7 +81,7 @@ class Player:
         s.holdingmouse=False
         s.originalmouse=[]
         
-        s.inventory=Inventory(40,[],"p",[],2,[],0,None,[],2)
+        s.inventory=Inventory(13,[],"p",[],2,[],0,None,[],2)
     def genral(s,window,keys,croshier:object,mouse,mousepos):#prvi put ovo radim sa:object
         global offsetx,offsety
         if s.tabstate==False:
@@ -186,11 +219,10 @@ class crosheir:
     def __init__(s,x,y):
         s.x=x
         s.y=y
-        s.image=textures["crosheir"]
-        s.wh=s.image.get_width()
     def draw(s,window,mousepos):
+        s.im=textures[f"crosheir{p1.tabstate}"]
         s.x=mousepos[0]
         s.y=mousepos[1]
-        window.blit(s.image,(s.x-s.wh/2,s.y-s.wh/2))
+        window.blit(s.im,s.im.get_rect(center=(s.x,s.y)))
 p1=Player(WIDTH/2,HEIGHT/2,5,None,0,2.5)
 croshair=crosheir(0,0)
