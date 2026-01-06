@@ -26,4 +26,7 @@ def load():
     textures["inventoryslot"]=pygame.transform.scale(pygame.image.load("textures/inventory slot.png"),(tilew-tilew/4,tileh-tileh/4))
     textures["crosheirTrue"]=pygame.transform.scale(pygame.image.load("textures/mouse.png"),(tileh/2.5,tileh/3))
     textures["hat"]=pygame.transform.scale(pygame.image.load("textures/hat.png"),(tilew-tilew/2.5,tileh-tileh/2.5))
+    textures["font-/2.5"]= pygame.font.SysFont('B', int((tilew-tilew/2.5)/2.5))
+    for i in range(50):
+        textures[f"num{i}"]=textures["font-/2.5"].render(f"{i}",False,(255,255,255))
     return textures

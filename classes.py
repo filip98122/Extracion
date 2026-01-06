@@ -26,6 +26,7 @@ class Inventory:
                 window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
                 if s.contents[i*4+j][0]!=None:
                     window.blit(textures[f"{s.contents[i*4+j][0]}"],textures[f"{s.contents[i*4+j][0]}"].get_rect(center=(j*s.w+s.awayfromleft+s.w//2,i*s.h+s.awayfromtop+s.h//2)))
+                    window.blit(textures[f"num{s.contents[i*4+j][1]}"],textures[f"num{s.contents[i*4+j][1]}"].get_rect(center=((1+j)*s.w+s.awayfromleft-s.w//2.5+(s.w//2.5//2),(1+i)*s.h+s.awayfromtop-s.h//2.5+(s.h//2.5//2))))
     def swap(s,xyoriginal,xy):
         xyoriginal[0]-=s.awayfromleft
         xyoriginal[1]-=s.awayfromtop
@@ -40,10 +41,10 @@ class Inventory:
             if xyoriginal[0]<0 or xyoriginal[0]>s.w*4 or xyoriginal[1]<0 or xyoriginal[1]>tall*s.h:
                 return
         else:
-            if (xy[0]<0 or xy[0]>s.w*4 or xy[1]<0 or xy[1]>tall*s.h) and not (xy[0]>=0 and xy[0]<=s.w*(s.contents%4) and xy[1]>=s.h*(s.size//4) and xy[1]<= tall*s.h):
+            if (xy[0]<0 or xy[0]>s.w*4 or xy[1]<0 or xy[1]>tall*s.h) and not (xy[0]>=0 and xy[0]<=s.w*(s.size%4) and xy[1]>=s.h*(s.size//4) and xy[1]<= tall*s.h):
                 #drop to ground
                 return
-            if (xyoriginal[0]<0 or xyoriginal[0]>s.w*4 or xyoriginal[1]<0 or xyoriginal[1]>tall*s.h) and not (xyoriginal[0]>=0 and xyoriginal[0]<=s.w*(s.contents%4) and xyoriginal[1]>=s.h*(s.size//4) and xyoriginal[1]<= tall*s.h):
+            if (xyoriginal[0]<0 or xyoriginal[0]>s.w*4 or xyoriginal[1]<0 or xyoriginal[1]>tall*s.h) and not (xyoriginal[0]>=0 and xyoriginal[0]<=s.w*(s.size%4) and xyoriginal[1]>=s.h*(s.size//4) and xyoriginal[1]<= tall*s.h):
                 return
         
         originalindex=xyoriginal[1]//s.h*4+xyoriginal[0]//s.w
