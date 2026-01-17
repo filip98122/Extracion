@@ -1,5 +1,35 @@
 from pesonalfunctions import *
 
+dictionary={"split":detect_split}
+class Button:
+    def __init__(s,x,y,w,h,type,text=None,pic=None,priority=None):
+        s.x=x
+        s.w=w
+        s.h=h
+        s.y=y
+        s.type=type
+        s.text=text
+        s.pic=pic
+        s.priority=priority
+        s.x-=s.w//2
+        s.y-=s.h//2
+        if priority==None:
+            s.priority=[s.picd,s.textd]
+        else:
+            s.priority=[s.textd,s.picd]
+            
+    def picd(s):
+        if s.pic!=None:
+            window.blit(textures[s.pic],(s.x,s.y))
+    
+    def textd(s):
+        if s.text!=None:
+            window.blit(textures[s.text],textures[s.text].get_rect(center=(s.x+s.w//2,s.y+s.h//2)))
+            
+    def general(s):
+        dictionary[s.type]()
+        
+            
 class Inventory:
     def __init__(s,size,contents,origin,gunslots=None,gunslotssize=None,extraslots=None,extraslotssize=None,extraslotstype=None,safeslots=None,safeslotssize=None):
         s.size=size
@@ -17,16 +47,24 @@ class Inventory:
         s.safeslotssize=safeslotssize
         s.awayfromleft=1000
         s.awayfromtop=300
+        s.actions=None
         s.w=textures["inventoryslot"].get_width()
         s.h=textures["inventoryslot"].get_height()
         
     def p(s,moustate,mouse,holdingmouse,originalmouse):
-        for i in range(max(s.size//4+1,1)):
+        for i in range(max(math.ceil(s.size/4),1)):
             for j in range(min(s.size-i*4,4)):
                 window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
                 if s.contents[i*4+j][0]!=None:
+                    if i*4+j==s.actions:
+                        pygame.draw.rect(window,(255,255,255),textures["inventoryslot"].get_rect(center=(j*s.w+s.awayfromleft+s.w//2,i*s.h+s.awayfromtop+s.h//2)))
+                    window.blit(textures["inventoryslot"],(j*s.w+s.awayfromleft,i*s.h+s.awayfromtop))
                     window.blit(textures[f"{s.contents[i*4+j][0]}"],textures[f"{s.contents[i*4+j][0]}"].get_rect(center=(j*s.w+s.awayfromleft+s.w//2,i*s.h+s.awayfromtop+s.h//2)))
-                    window.blit(textures[f"num{s.contents[i*4+j][1]}"],textures[f"num{s.contents[i*4+j][1]}"].get_rect(center=((1+j)*s.w+s.awayfromleft-s.w//2.5+(s.w//2.5//2),(1+i)*s.h+s.awayfromtop-s.h//2.5+(s.h//2.5//2))))
+                    window.blit(textures[f"num{s.contents[i*4+j][1]}"],textures[f"num{s.contents[i*4+j][1]}"].get_rect(center=((1+j)*s.w+s.awayfromleft-s.w//2.5+(s.w//2.5//2),(1+i)*s.h+s.awayfromtop-s.h//2.5 +(s.h//2.5//2))))
+                    
+        if None!=s.actions:
+            window.blit(textures["frame"],((s.actions%4)*s.w+s.awayfromleft+s.w,(s.actions//4)*s.h+s.awayfromtop+s.h-textures["frame"].get_height()))
+            
     def swap(s,xyoriginal,xy):
         xyoriginal[0]-=s.awayfromleft
         xyoriginal[1]-=s.awayfromtop
@@ -50,6 +88,10 @@ class Inventory:
         originalindex=xyoriginal[1]//s.h*4+xyoriginal[0]//s.w
         nowindex=xy[1]//s.h*4+xy[0]//s.w
         if originalindex!=nowindex:
+            if nowindex>=s.size:
+                nowindex=s.size-1
+            if originalindex>=s.size:
+                originalindex=s.size-1
             if s.contents[originalindex][0]==s.contents[nowindex][0]:
                 #Stack limit dict required
                     s.contents[nowindex][1]+=s.contents[originalindex][1]
@@ -81,8 +123,8 @@ class Player:
         s.holdingtab=False
         s.holdingmouse=False
         s.originalmouse=[]
-        
-        s.inventory=Inventory(13,[],"p",[],2,[],0,None,[],2)
+        s.holdingmouseR=False
+        s.inventory=Inventory(12,[],"p",[],2,[],0,None,[],2)
     def genral(s,window,keys,croshier:object,mouse,mousepos):#prvi put ovo radim sa:object
         global offsetx,offsety
         if s.tabstate==False:
@@ -127,13 +169,25 @@ class Player:
                 l_bullets.append(bullet(s.x,s.y,dx,dy*-1,s.angle,"s",offsetx,offsety))
         else:
             if mouse[0]:
-                if s.holdingmouse==False:
-                    s.holdingmouse=True
+                if s.inventory.actions==None:
+                    if s.holdingmouse==False:
+                        s.holdingmouse=True
+                        s.originalmouse=[mousepos[0],mousepos[1]]
+                    s.inventory.actions=None
+                else:
+                    x=s.inventory.awayfromleft+s.inventory.actions*textures
+                    if button_colision(textures["frame"].get_width(),textures["frame"].get_height(),s.)
+            if mouse[2]:
+                if s.holdingmouseR==False:
+                    s.holdingmouseR=True
                     s.originalmouse=[mousepos[0],mousepos[1]]
-            else:
+            if (s.holdingmouse==True and mouse[0]==False) or (s.holdingmouseR and mouse[1]==False):
                 if s.holdingmouse==True:
                     s.inventory.swap(s.originalmouse,[mousepos[0],mousepos[1]])
                     s.holdingmouse=False
+                elif s.holdingmouseR==True:
+                    s.inventory.actions=min((mousepos[1]-s.inventory.awayfromtop)//textures["inventoryslot"].get_height()*4+(mousepos[0]-s.inventory.awayfromleft)//textures["inventoryslot"].get_width(),s.inventory.size-1)
+                    s.holdingmouseR=False
             s.inventory.p(mouse,mousepos,s.holdingmouse,s.originalmouse)
         if keys[pygame.K_TAB]:
             if s.holdingtab==False:

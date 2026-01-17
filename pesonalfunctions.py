@@ -41,7 +41,14 @@ with open("map.txt","r",) as f:
         for j in range(len(ltemp[i])):
             maps[i].append(ltemp[i][j])
 namematch=[[".",None],["+",textures["+"],[137,167,137,167,141,171]],["t",textures["tree1"],[0,21,49,79,28,58]]]#[neki]
-
+def detect_split(x,y,w,h,prio:list[function]):
+    global p1
+    act=p1.inventory.actions
+    if act!=None:
+        for i in range(2):
+            prio[i]()
+        
+            
 lparticles=[]
 def rendermap(maps,name,offsetx,offsety,lbull):
     for i in range(len(maps)):
