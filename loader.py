@@ -8,6 +8,8 @@ import sys
 import copy
 pygame.init()
 pygame.font.init()
+mouseState = pygame.mouse.get_pressed()
+mousePos = pygame.mouse.get_pos()
 WIDTH,HEIGHT=1920,1080
 kolko=40
 tilew=120
@@ -27,7 +29,17 @@ def load():
     textures["crosheirTrue"]=pygame.transform.scale(pygame.image.load("textures/mouse.png"),(tileh/2.5,tileh/3))
     textures["hat"]=pygame.transform.scale(pygame.image.load("textures/hat.png"),(tilew-tilew/2.5,tileh-tileh/2.5))
     textures["frame"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),((tilew-tilew/4)*2.5,(tileh-tileh/4)*3.5))
+    textures["frameblack"]=pygame.transform.scale(pygame.image.load("textures/frameb.png"),((tilew)*5,(tileh)*1.5))
     textures["font-/2.5"]= pygame.font.SysFont('B', int((tilew-tilew/2.5)/2.5))
+    textures["fontsplit"]= pygame.font.SysFont('B', int(tileh-(tileh//8*5.5)))
+    textures["plus"]=pygame.transform.scale(pygame.image.load("textures/plus.png"),((tilew),(tileh)))
+    textures["framebigwhite"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),(tilew*5,tileh*1))
+    textures["minus"]=pygame.transform.scale(pygame.image.load("textures/minus.png"),((tilew),(tileh//7)))
+    textures["framebig"]=pygame.transform.scale(pygame.image.load("textures/frameb.png"),(tilew*5,tileh*1))
+    textures["slider"]=pygame.transform.scale(pygame.image.load("textures/emptyslider.png"),(tilew*11,tileh*1))
+    textures["dot"]=pygame.transform.scale(pygame.image.load("textures/dot.png"),((tilew),(tileh)))
+    textures["OK"]=textures["fontsplit"].render(f"OK",False,(255,255,255))
+    textures["split"]=textures["fontsplit"].render(f"Split stack",False,(0,0,0))
     for i in range(50):
         textures[f"num{i}"]=textures["font-/2.5"].render(f"{i}",False,(255,255,255))
     return textures

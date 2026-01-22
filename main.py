@@ -12,11 +12,11 @@ keylogesc=0
 #
 #
 #
+
 while True:
     if keylogesc>=1:
         keylogesc-=1
     window.fill((10,150,10))
-    rendermap(maps,namematch,offsetx,offsety,l_bullets)
     keys = pygame.key.get_pressed()
     events = pygame.event.get()
     mouseState = pygame.mouse.get_pressed()
@@ -26,7 +26,13 @@ while True:
         if keys[pygame.K_ESCAPE]:
             keylogesc=300
             break
-    if p1.tabstate==False:
+    if splitscreenitem==True:
+        window.fill("black")
+        window.blit(textures["framebig"],textures["framebig"].get_rect(center=(WIDTH//2,HEIGHT//2)))
+        Slidersplit.general(mousePos,mouseState)
+        croshair.draw(window,mousePos)
+    elif p1.tabstate==False:
+        rendermap(maps,namematch,offsetx,offsety,l_bullets)
         for i in range(len(l_bullets)):
             l_bullets[cou].general(window)
             if l_bullets[cou].halflife<=0:
@@ -67,7 +73,7 @@ while True:
             l_enemies[cou].general(window,keys,p1)
             cou+=1
     
-        offsetx,offsety=p1.genral(window,keys,croshair,mouseState,mousePos)
+        offsetx,offsety,arguments=p1.genral(window,keys,croshair,mouseState,mousePos)
         croshair.draw(window,mousePos)
         count=0
         for i in range(len(lparticles)):
@@ -76,9 +82,11 @@ while True:
                 del lparticles[count]
                 continue
             count+=1
-    if p1.tabstate:
+    elif p1.tabstate:
         window.fill("black")
-        offsetx,offsety=p1.genral(window,keys,croshair,mouseState,mousePos)
+        offsetx,offsety,arguments=p1.genral(window,keys,croshair,mouseState,mousePos)
+        splitscreenitem=arguments[0]
         croshair.draw(window,mousePos)
+    
     pygame.display.update()
     clock.tick(60)
