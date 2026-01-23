@@ -36,7 +36,7 @@ def load():
     textures["framebigwhite"]=pygame.transform.scale(pygame.image.load("textures/frame.png"),(tilew*5,tileh*1))
     textures["minus"]=pygame.transform.scale(pygame.image.load("textures/minus.png"),((tilew),(tileh//7)))
     textures["framebig"]=pygame.transform.scale(pygame.image.load("textures/frameb.png"),(tilew*5,tileh*1))
-    textures["slider"]=pygame.transform.scale(pygame.image.load("textures/emptyslider.png"),(tilew*11,tileh*1))
+    textures["slider"]=pygame.transform.scale(pygame.image.load("textures/emptyslider.png"),(tilew*11,tileh*1.2))
     textures["dot"]=pygame.transform.scale(pygame.image.load("textures/dot.png"),((tilew),(tileh)))
     textures["OK"]=textures["fontsplit"].render(f"OK",False,(255,255,255))
     textures["split"]=textures["fontsplit"].render(f"Split stack",False,(0,0,0))

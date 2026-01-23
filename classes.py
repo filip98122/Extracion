@@ -12,24 +12,25 @@ class Slider:
         s.maxperc=mx
         s.a=textures["slider"].get_width()/100*9
         s.b=textures["slider"].get_width()/100*82
+        s.wt=1.75
         s.holding=False
     def general(s,mousep,mouses):
         pygame.draw.rect(window,"red",pygame.Rect(s.x,s.y,s.a+(s.b//s.maxperc)*s.percentege,s.h))
         window.blit(textures["slider"],(s.x,s.y))
         window.blit(textures["dot"],textures["dot"].get_rect(center=(s.x+s.a+(s.b//s.maxperc)*s.percentege,s.y+s.h//2)))
         
-        pygame.draw.circle(window,"white",(s.x+s.w//4,s.y+s.h+(textures["minus"].get_height())*4.5),tileh*0.65)
-        window.blit(textures["minus"],textures["minus"].get_rect(center=(s.x+s.w//4,s.y+s.h+(textures["minus"].get_height())*4.5)))
+        pygame.draw.circle(window,"white",(s.x+s.w//4,s.y+s.h+(textures["plus"].get_height())*s.wt),tileh*0.65)
+        window.blit(textures["minus"],textures["minus"].get_rect(center=(s.x+s.w//4,s.y+s.h+(textures["plus"].get_height())*s.wt)))
         
-        pygame.draw.circle(window,"white",(s.x+(s.w//4)*3,s.y+s.h+(textures["minus"].get_height())*4.5),tileh*0.65)
-        window.blit(textures["plus"],textures["plus"].get_rect(center=(s.x+(s.w//4)*3,s.y+s.h+(textures["minus"].get_height())*4.5)))
+        pygame.draw.circle(window,"white",(s.x+(s.w//4)*3,s.y+s.h+(textures["plus"].get_height())*s.wt),tileh*0.65)
+        window.blit(textures["plus"],textures["plus"].get_rect(center=(s.x+(s.w//4)*3,s.y+s.h+(textures["plus"].get_height())*s.wt)))
         if mouses[0]:
             if s.holding==False:
-                if collison(s.x+(s.w//4)*1,s.y+s.h+(textures["minus"].get_height())*4.5,tileh*0.65,mousep[0],mousep[1],1):
-                    if s.percentege>=11:
+                if collison(s.x+(s.w//4)*1,s.y+s.h+(textures["plus"].get_height())*s.wt,tileh*0.65,mousep[0],mousep[1],1):
+                    if s.percentege>=1:
                         s.percentege-=1
                         s.holding=True
-                if collison(s.x+(s.w//4)*3,s.y+s.h+(textures["minus"].get_height())*4.5,tileh*0.65,mousep[0],mousep[1],1):
+                if collison(s.x+(s.w//4)*3,s.y+s.h+(textures["plus"].get_height())*s.wt,tileh*0.65,mousep[0],mousep[1],1):
                     if s.percentege<=s.maxperc-1:
                         s.percentege+=1
                         s.holding=True
